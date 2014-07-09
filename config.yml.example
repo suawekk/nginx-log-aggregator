@@ -1,0 +1,16 @@
+default:
+    recipient: "nginxlogs@localhost"
+    title: Nginx Log Aggregator
+    template: email.erb
+    format: '$remote_addr - $remote_user [$time_local]  "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" upstream: "$upstream_addr" "$upstream_status" "$upstream_response_time" "$upstream_cache_status"'
+    limits:
+        top_problems: 10
+        min_count: 10
+    time_local:
+        from: '20 days ago'
+        to: 'now'
+test:
+    source:
+        - test.a
+        - test.b
+    title: TEST CONFIGURATION

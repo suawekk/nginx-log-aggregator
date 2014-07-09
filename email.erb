@@ -1,0 +1,43 @@
+To: <%= recipient %> 
+Subject: nginx logs for <%= title %> 
+Content-Type: text/html
+
+<html>
+<body>
+<h2>Hello <%= recipient %>!</h2>
+<br />
+Below are aggregated HTTP problems for <strong><%= title %></strong><br />
+<br />
+<% if !time_local['to'].nil? && !time_local['to'].nil? %>
+(which occured between <%= time_local['from'] %> and <%= time_local['to'] %>)<br />
+<% end %>
+<br />
+scanned file(s):<br />
+<ol>
+<% if source.class  == Array %>
+    <li><%= source.join("</li><li>") %></li>
+<% elsif source.class == String %>
+<%= source %><br />
+<% else %>
+(no files passed!)<br />
+<% end %>
+</ol>
+<% if problematic_entries.count > 0 %>
+Total problems found: <%=  problematic_entries.count %><br />
+Top <%= top_problems.count %> problem(s):<br />
+<pre>
+<% table_head = ['Request','Count','Statuses'] %>
+<% table = Text::Table.new(:head => table_head,:rows => top_problems) %>
+<%= table %>
+</pre>
+<% else %>
+Great! No problems found<br />
+<% end %>
+<% unless limits['min_count'].nil? %>
+
+Problems which occured less than <%= limits['min_count'] %> times are filtered out<br />
+<% end %>
+<hr />
+Generated at: <%= Time.new %> by suawek's nginx log aggregator<br />
+</body>
+</html>
